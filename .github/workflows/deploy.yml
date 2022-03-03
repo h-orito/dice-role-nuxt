@@ -1,0 +1,37 @@
+name: deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_push:
+    runs-on: self-hosted
+    env:
+      IMAGE_NAME: dice-role
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.ref }}
+
+      - name: build
+        run: >
+          docker build
+          -t ghcr.io/h-orito/${{ env.IMAGE_NAME }}:latest .
+          --build-arg FIREBASE_API_KEY=${{ secrets.FIREBASE_API_KEY }}
+          --build-arg FIREBASE_AUTH_DOMAIN=${{ secrets.FIREBASE_AUTH_DOMAIN }}
+          --build-arg FIREBASE_DATABASE_URL=${{ secrets.FIREBASE_DATABASE_URL }}
+          --build-arg FIREBASE_PROJECT_ID=${{ secrets.FIREBASE_PROJECT_ID }}
+          --build-arg FIREBASE_STORAGE_BUCKET=${{ secrets.FIREBASE_STORAGE_BUCKET }}
+          --build-arg FIREBASE_MESSAGING_SENDER_ID=${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+          --build-arg FIREBASE_APP_ID=${{ secrets.FIREBASE_APP_ID }}
+      - name: push
+        run: |
+          docker login ghcr.io -u h-orito -p ${{ secrets.PACKAGE_PAT }}
+          docker push ghcr.io/h-orito/${{ env.IMAGE_NAME }}
+      - name: release
+        run: |
+          kubectl delete pod -l app=dice-role

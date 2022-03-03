@@ -1,16 +1,10 @@
-import {
-  ref,
-  get,
-  query,
-  orderByChild,
-  limitToLast,
-  getDatabase
-} from 'firebase/database'
-import firebase from '~~/src/plugins/firebase.server'
+import { ref, get, query, orderByChild, limitToLast } from 'firebase/database'
+import { useDatabase } from './useDatabase'
 
 export const useGames = async () => {
-  const db = getDatabase(firebase)
-
+  if (process.client) return []
+  const db = useDatabase()
+  if (!db) return []
   const snapshotGames = (
     await get(query(ref(db, 'games'), orderByChild('created'), limitToLast(10)))
   ).val()

@@ -3,13 +3,11 @@ import { FirebaseApp, initializeApp } from 'firebase/app'
 import {
   Auth,
   getAuth,
-  onAuthStateChanged,
   GoogleAuthProvider,
   TwitterAuthProvider,
   signInWithPopup,
   signOut
 } from 'firebase/auth'
-import { setAccessToken } from '~/components/firebase/auth-cookie'
 
 declare module '#app' {
   interface NuxtApp {
@@ -39,17 +37,6 @@ export default defineNuxtPlugin((nuxtApp) => {
     signIn(auth, new TwitterAuthProvider())
   )
   nuxtApp.provide('signOut', async () => signOut(auth))
-
-  // onAuthStateChanged(auth, (user) => {
-  //   const authState: AuthState = {
-  //     isSignedIn: user != null,
-  //     userId: user?.uid,
-  //     userName: user?.displayName
-  //   }
-  //   console.log('state changed.')
-  //   console.log(authState)
-  //   useState('authState', () => authState)
-  // })
 })
 
 const signIn = async (
