@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import { Ref } from 'vue'
 import SignInModal from '~/components/firebase/sign-in-modal.vue'
 
 const { data: games } = await useFetch('/api/games')
