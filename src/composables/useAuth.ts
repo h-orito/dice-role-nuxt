@@ -1,6 +1,9 @@
 import { Ref } from 'vue'
 import { onAuthStateChanged } from 'firebase/auth'
-import { setAccessToken } from '~/components/firebase/auth-cookie'
+import {
+  setAccessToken,
+  setRefreshToken
+} from '~/components/firebase/auth-cookie'
 
 export const useAuth = async () => {
   const authState: Ref<AuthState> = useState('authState', () => ({
@@ -16,11 +19,10 @@ export const useAuth = async () => {
         userId: user?.uid,
         userName: user?.displayName
       }
-      console.log('state changed.')
-      console.log(newState)
       authState.value = newState
       const token = await user?.getIdToken(true)
       setAccessToken(token ?? '')
+      setRefreshToken(user?.refreshToken ?? '')
     })
   })
   return authState

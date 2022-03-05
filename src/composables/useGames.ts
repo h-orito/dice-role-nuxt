@@ -3,7 +3,7 @@ import { useDatabase } from './useDatabase'
 
 export const useGames = async () => {
   if (process.client) return []
-  const db = useDatabase()
+  const db = await useDatabase()
   if (!db) return []
   const snapshotGames = (
     await get(query(ref(db, 'games'), orderByChild('created'), limitToLast(10)))
