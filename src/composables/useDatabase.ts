@@ -20,21 +20,3 @@ export const useDatabase = async () => {
   const firebase: FirebaseApp = getFirebaseApp(getApps())
   return getDatabase(firebase)
 }
-
-//   const fetchGame = async (key: string): Promise<Game | null> => {
-//     const snapshotGame = (await get(ref(db, `games/${key}`))).val()
-//     if (snapshotGame == null) return null
-//     return {
-//       ...snapshotGame,
-//       key
-//     }
-//   }
-
-//   const registerGame = async (game: Game): Promise<Game> => {
-//     const newGameRef = await push(child(ref(db), 'games'))
-//     set(newGameRef, game)
-//     return {
-//       ...game,
-//       key: newGameRef.key
-//     }
-//   }

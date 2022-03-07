@@ -3,7 +3,7 @@ import { onAuthStateChanged } from 'firebase/auth'
 import {
   setAccessToken,
   setRefreshToken
-} from '~/components/firebase/auth-cookie'
+} from '~~/src/components/auth/auth-cookie'
 
 export const useAuth = async () => {
   const authState: Ref<AuthState> = useState('authState', () => ({

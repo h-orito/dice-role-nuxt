@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from 'http'
-import { useGames } from '~/composables/useGames'
+import { fetchGames } from '~/components/firebase/database'
 
 export default async (req: IncomingMessage, res: ServerResponse) => {
-  return await useGames()
+  return await fetchGames()
 }

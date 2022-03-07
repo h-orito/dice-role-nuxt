@@ -8,7 +8,9 @@ export default defineNuxtConfig({
   },
   publicRuntimeConfig: {
     firebaseApiKey: process.env.FIREBASE_API_KEY,
-    firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN
+    firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
+    imageUploaderDomain: 'http://140.83.55.4:30953/image-uploader',
+    thumanailHost: 'http://140.83.55.4:30953'
   },
   privateRuntimeConfig: {
     firebaseDatabaseUrl: process.env.FIREBASE_DATABASE_URL,
@@ -20,5 +22,13 @@ export default defineNuxtConfig({
   },
   nitro: {
     preset: 'server'
-  }
+  },
+  css: [
+    'primevue/resources/themes/saga-blue/theme.css',
+    'primevue/resources/primevue.css',
+    'primeicons/primeicons.css',
+    'primeflex/primeflex.css',
+    '@/assets/css/main.css',
+    '@/assets/scss/main.scss'
+  ]
 })
