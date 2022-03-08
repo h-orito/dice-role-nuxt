@@ -30,24 +30,21 @@
 import { Ref } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required, minLength, maxLength } from '@vuelidate/validators'
-import dayjs from 'dayjs'
-import isBetween from 'dayjs/plugin/isBetween'
-import GameName from '~/components/pages/create-game/game-name'
-import Description from '~/components/pages/create-game/description'
-import GameType from '~/components/pages/create-game/game-type'
-import Interval from '~/components/pages/create-game/interval'
-import GameStartDatetime from '~/components/pages/create-game/game-start-datetime'
-import ThemeImage from '~/components/pages/create-game/theme-image'
-import ConfirmModal from '~/components/pages/create-game/confirm-modal'
+import GameName from '~/components/pages/create-game/game-name.vue'
+import Description from '~/components/pages/create-game/description.vue'
+import GameType from '~/components/pages/create-game/game-type.vue'
+import Interval from '~/components/pages/create-game/interval.vue'
+import GameStartDatetime from '~/components/pages/create-game/game-start-datetime.vue'
+import ThemeImage from '~/components/pages/create-game/theme-image.vue'
+import ConfirmModal from '~/components/pages/create-game/confirm-modal.vue'
 
-dayjs.extend(isBetween)
-
+const { $dayjs } = useNuxtApp()
 const gameName = ref('')
 const description = ref('')
 const gameType = ref('ap')
 const intervalHours = ref(24)
 const intervalMinutes = ref(0)
-const startDatetime = ref(dayjs().add(7, 'd').startOf('day').toDate())
+const startDatetime = ref($dayjs().add(7, 'd').startOf('day').toDate())
 const themeImage: Ref<File | null> = ref(null)
 
 const rules = {
@@ -73,8 +70,8 @@ const rules = {
   startDatetime: {
     required,
     recency: () => {
-      const date = dayjs(startDatetime.value)
-      const now = dayjs()
+      const date = $dayjs(startDatetime.value)
+      const now = $dayjs()
       const maxDate = now.add(1, 'M')
       return date.isBetween(now, maxDate)
     }

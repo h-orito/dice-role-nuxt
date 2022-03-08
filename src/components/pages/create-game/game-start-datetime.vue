@@ -20,15 +20,14 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs'
-
+// props
 interface Props {
   value: string
   hasError: boolean
 }
-
 const props = defineProps<Props>()
 
+// emits
 const emit = defineEmits<{
   (e: 'update:value', value: string): string
 }>()
@@ -38,7 +37,8 @@ const value = computed({
   set: (value: string) => emit('update:value', value)
 })
 
-const now = dayjs()
+const { $dayjs } = useNuxtApp()
+const now = $dayjs()
 const minDate = now.toDate()
 const maxDate = now.add(1, 'M').toDate()
 </script>

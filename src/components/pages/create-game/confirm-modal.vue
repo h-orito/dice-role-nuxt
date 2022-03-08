@@ -42,8 +42,8 @@
 
 <script setup lang="ts">
 import { Ref } from 'vue'
-import dayjs from 'dayjs'
 
+// props
 interface Props {
   show: boolean
   game: {
@@ -56,9 +56,9 @@ interface Props {
     themeImage: File | null
   }
 }
-
 const props = defineProps<Props>()
 
+// emits
 const emit = defineEmits<{
   (e: 'update:show', value: boolean): boolean
 }>()
@@ -68,6 +68,7 @@ const isShow = computed({
   set: (value: boolean | undefined) => emit('update:show', value ?? false)
 })
 
+const { $dayjs } = useNuxtApp()
 const gameItems = computed(() => {
   return [
     {
@@ -88,7 +89,7 @@ const gameItems = computed(() => {
     },
     {
       name: '開始日時',
-      value: dayjs(props.game.startDatetime).format('YYYY/MM/DD HH:mm')
+      value: $dayjs(props.game.startDatetime).format('YYYY/MM/DD HH:mm')
     },
     {
       name: 'テーマ画像',
@@ -126,7 +127,8 @@ const save = async () => {
         type: gameType,
         intervalSeconds: intervalHours * 3600 + intervalMinutes * 60,
         startDatetime: startDatetime,
-        themeImageUrl: imageUrl
+        themeImageUrl: imageUrl,
+        created: $dayjs().unix()
       } as Game
     }
   })

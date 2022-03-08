@@ -35,9 +35,8 @@ const registerGame = async (game: Game): Promise<Game> => {
   if (process.client) return game
   const db = await useFirebaseAdminDatabase()
   if (!db) return game
-
   const newGameRef = await db.ref('games').push()
-  newGameRef.set(game)
+  await newGameRef.set(game)
   return {
     ...game,
     key: newGameRef.key

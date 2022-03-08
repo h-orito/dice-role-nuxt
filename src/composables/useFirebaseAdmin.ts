@@ -1,3 +1,4 @@
+import config from '#config'
 import {
   applicationDefault,
   initializeApp,
@@ -9,7 +10,7 @@ const getFirebaseAdmin = (apps: App[]) => {
   if (apps.length) return apps[0]
   return initializeApp({
     credential: applicationDefault(),
-    databaseURL: process.env.FIREBASE_DATABASE_URL
+    databaseURL: config.firebaseDatabaseUrl
   })
 }
 
