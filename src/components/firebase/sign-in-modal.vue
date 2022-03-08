@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 interface Props {
-  isShow: boolean
+  show: boolean
 }
 
 const props = defineProps<Props>()

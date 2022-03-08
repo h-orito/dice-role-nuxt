@@ -118,7 +118,7 @@ const save = async () => {
   }
 
   const config = useRuntimeConfig()
-  const { data: game } = await useFetch(`${config.apiRoot}api/create-game`, {
+  const { data: game } = (await useFetch(`${config.apiRoot}api/create-game`, {
     headers: useRequestHeaders(['cookie']),
     method: 'POST',
     body: {
@@ -132,7 +132,7 @@ const save = async () => {
         created: $dayjs().unix()
       } as Game
     }
-  })
+  })) as { data: Ref<Game> }
 
   useRouter().push({
     path: '/game',

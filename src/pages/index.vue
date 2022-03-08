@@ -5,7 +5,7 @@
       <div class="grid">
         <GameCard
           v-for="game in games"
-          :key="game.key"
+          :key="game.key!"
           :game="game"
           class="col-12 sm:col-6 lg:col-4"
         />
@@ -30,14 +30,15 @@
 </template>
 
 <script setup lang="ts">
+import { Ref } from 'vue'
 import SignInModal from '~/components/firebase/sign-in-modal.vue'
 import { useAuth } from '~/composables/useAuth'
 import GameCard from '~/components/pages/index/game-card.vue'
 
 const config = useRuntimeConfig()
-const { data: games } = await useFetch(`${config.apiRoot}api/games`, {
+const { data: games } = (await useFetch(`${config.apiRoot}api/games`, {
   headers: useRequestHeaders(['cookie'])
-})
+})) as { data: Ref<Game[]> }
 
 const authState = await useAuth()
 

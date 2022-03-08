@@ -39,6 +39,7 @@ WORKDIR /app
 ENV NPM_CONFIG_PREFIX /home/user/node_modules
 ENV PATH /home/user/node_modules/bin:${PATH}
 ENV NODE_ENV production
+ENV GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
 
 COPY --chown=user:user package*.json ./
 COPY --from=builder --chown=user:user /app/.output ./.output
@@ -50,4 +51,4 @@ EXPOSE 3000
 ENV PORT 3000
 ENV HOST 0.0.0.0
 
-ENTRYPOINT ["node", ".output/server/index.mjs"] 
+ENTRYPOINT ["GOOGLE_APPLICATION_CREDENTIALS=$GOOGLE_APPLICATION_CREDENTIALS", "node", ".output/server/index.mjs"] 

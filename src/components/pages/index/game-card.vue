@@ -14,7 +14,7 @@
           :alt="game.name"
           :src="game.themeImageUrl"
         />
-        <img v-else alt="no image" src="/image/dice.jpg" />
+        <img v-else alt="no image" :src="`${config.apiRoot}image/dice.jpg`" />
       </template>
       <template #title>
         <h2 class="my-0" v-text="game.name"></h2>
@@ -28,6 +28,8 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig()
+
 interface Props {
   game: Game
 }
