@@ -7,7 +7,8 @@
 </template>
 
 <script setup lang="ts">
-const { data: game } = await useFetch('/api/game', {
+const config = useRuntimeConfig()
+const { data: game } = await useFetch(`${config.apiRoot}api/game`, {
   headers: useRequestHeaders(['cookie']),
   params: {
     key: useRoute().query.key

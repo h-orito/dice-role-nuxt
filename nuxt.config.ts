@@ -2,6 +2,9 @@ import { defineNuxtConfig } from 'nuxt3'
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
+  router: {
+    base: '/dice-role/'
+  },
   app: {
     baseURL: '/dice-role/'
     // buildAssetsDir: '/dice-role/'
@@ -14,7 +17,8 @@ export default defineNuxtConfig({
     firebaseApiKey: process.env.FIREBASE_API_KEY,
     firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
     imageUploaderDomain: 'http://140.83.55.4:30953/image-uploader',
-    thumanailHost: 'http://140.83.55.4:30953'
+    thumanailHost: 'http://140.83.55.4:30953',
+    apiRoot: process.server ? '/' : '/dice-role/'
   },
   privateRuntimeConfig: {
     firebaseDatabaseUrl: process.env.FIREBASE_DATABASE_URL,

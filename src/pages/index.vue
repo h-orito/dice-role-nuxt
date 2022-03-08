@@ -32,9 +32,10 @@
 <script setup lang="ts">
 import SignInModal from '~/components/firebase/sign-in-modal.vue'
 import { useAuth } from '~/composables/useAuth'
-import GameCard from '~/components/pages/index/game-card'
+import GameCard from '~/components/pages/index/game-card.vue'
 
-const { data: games } = await useFetch('/api/games', {
+const config = useRuntimeConfig()
+const { data: games } = await useFetch(`${config.apiRoot}api/games`, {
   headers: useRequestHeaders(['cookie'])
 })
 
