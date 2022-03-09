@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="my-3">
-      <ButtonPrimary label="保存する" @click="save" />
+      <ButtonPrimary label="保存する" :disabled="submitting" @click="save" />
     </div>
   </Modal>
 </template>
@@ -44,7 +44,7 @@ const isShow = computed({
 const userName = ref('')
 
 onMounted(async () => {
-  const { data } = (await useFetch(`api/user`, {
+  const { data } = (await useFetch(`${useRoot()}api/user`, {
     headers: useRequestHeaders(['cookie'])
   })) as { data: Ref<DiceRoleUser> }
   userName.value = data.value.userName
@@ -69,7 +69,7 @@ const save = async () => {
   const userInfo: DiceRoleUser = {
     userName: userName.value
   }
-  await useFetch(`api/modify-user`, {
+  await useFetch(`${useRoot()}api/modify-user`, {
     headers: useRequestHeaders(['cookie']),
     method: 'POST',
     body: {

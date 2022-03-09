@@ -13,8 +13,7 @@ export default defineNuxtConfig({
     firebaseApiKey: process.env.FIREBASE_API_KEY,
     firebaseAuthDomain: process.env.FIREBASE_AUTH_DOMAIN,
     imageUploaderDomain: 'http://140.83.55.4:30953/image-uploader',
-    thumanailHost: 'http://140.83.55.4:30953',
-    apiRoot: process.server ? '/' : '/dice-role/'
+    thumanailHost: 'http://140.83.55.4:30953'
   },
   privateRuntimeConfig: {
     firebaseDatabaseUrl: process.env.FIREBASE_DATABASE_URL,

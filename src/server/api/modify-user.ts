@@ -7,7 +7,8 @@ export default async (req: IncomingMessage, res: ServerResponse) => {
   const { user }: Body = await useBody(req)
   const userId = await getUserIdBySession(req, res)
   if (!userId) return
-  return await updateUser(userId, user)
+  await updateUser(userId, user)
+  return {}
 }
 
 type Body = {

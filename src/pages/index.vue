@@ -46,7 +46,7 @@ import { useAuth } from '~/composables/useAuth'
 import GameCard from '~/components/pages/index/game-card.vue'
 import ModifyUserinfoModal from '../components/firebase/modify-userinfo-modal.vue'
 
-const { data: games } = (await useFetch(`api/games`, {
+const { data: games } = (await useFetch(`${useRoot()}api/games`, {
   headers: useRequestHeaders(['cookie'])
 })) as { data: Ref<Game[]> }
 
