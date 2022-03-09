@@ -1,0 +1,3 @@
+type DiceRoleUser = {
+  userName: string
+}

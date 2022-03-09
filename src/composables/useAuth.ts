@@ -21,8 +21,16 @@ export const useAuth = async () => {
       }
       authState.value = newState
       const token = await user?.getIdToken(true)
-      setAccessToken(token ?? '')
-      setRefreshToken(user?.refreshToken ?? '')
+      await setAccessToken(token ?? '')
+      await setRefreshToken(user?.refreshToken ?? '')
+      if (user && process.client) {
+        await useFetch(`api/login`, {
+          method: 'POST',
+          body: {
+            token
+          }
+        })
+      }
     })
   })
   return authState

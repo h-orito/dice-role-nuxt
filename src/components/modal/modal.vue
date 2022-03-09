@@ -17,6 +17,7 @@
         <ButtonPrimary
           v-if="submitButtonName"
           :label="submitButtonName"
+          :disabled="submitDisabled"
           @click="$emit('submit')"
         />
       </div>
@@ -29,6 +30,7 @@ interface Props {
   show: boolean
   header?: string
   submitButtonName?: string
+  submitDisabled?: boolean
   closeButtonName?: string
 }
 

@@ -1,54 +1,135 @@
-import { IncomingMessage } from 'http'
-import Cookies from 'universal-cookie'
+import { IncomingMessage, OutgoingMessage } from 'http'
+import { serialize } from 'cookie'
+import Cookies, { CookieChangeOptions } from 'universal-cookie'
 import { getAuth, DecodedIdToken } from 'firebase-admin/auth'
 import { useFirebaseAdmin } from '~/composables/useFirebaseAdmin'
-import { cookieKeys } from './auth-cookie'
-// import dayjs from 'dayjs'
+import { cookieKeys, setSessionCookie } from './auth-cookie'
 
-export const isAuthenticated = async (req: IncomingMessage) => {
-  const accessToken = getAccessToken(req)
+// idTokenが有効か
+export const isAuthenticated = async (
+  req: IncomingMessage,
+  res: OutgoingMessage
+) => {
+  const accessToken = getAccessToken(req, res)
   if (!accessToken) return false
   const decodedToken = await decodeAccessToken(accessToken)
-  if (!decodedToken) return false
-  // しばらくは有効期限検証を行わない
-  return true
-  // const exp = decodedToken.exp
-  // const now = dayjs().unix()
-  // return now < exp
+  return !!decodedToken
 }
 
-const getAccessToken = (req: IncomingMessage) => {
-  const cookies = getCookiesInstance(req)
-  return cookies.get(cookieKeys.accessToken)
+// sessionが有効か
+export const isAuthenticatedBySession = async (
+  req: IncomingMessage,
+  res: OutgoingMessage
+) => {
+  const sessionToken = await getSessionToken(req, res)
+  if (!sessionToken) return false
+  const decodedToken = await decodeSessionToken(sessionToken)
+  return !!decodedToken
 }
 
 export const getUserId = async (
-  req: IncomingMessage
+  req: IncomingMessage,
+  res: OutgoingMessage
 ): Promise<string | null> => {
-  const accessToken = getAccessToken(req)
+  const accessToken = getAccessToken(req, res)
   if (!accessToken) return null
   const decodedToken = await decodeAccessToken(accessToken)
   if (!decodedToken) return null
   return decodedToken.uid
 }
 
-// server側でCookieの変更がない前提
-// ある場合は https://qiita.com/tomoeine/items/91163ec5a674d697bc75 を参考に変える
-const getCookiesInstance = (req: IncomingMessage) => {
+export const getUserIdBySession = async (
+  req: IncomingMessage,
+  res: OutgoingMessage
+): Promise<string | null> => {
+  const sessionToken = await getSessionToken(req, res)
+  if (!sessionToken) return null
+  const decodedToken = await decodeSessionToken(sessionToken)
+  if (!decodedToken) return null
+  return decodedToken.uid
+}
+
+export const setSession = async (
+  req: IncomingMessage,
+  res: OutgoingMessage,
+  token: string
+): Promise<void> => {
+  const sessionCookie = await createSessionCookie(token)
+  const cookies = getCookiesInstance(req, res)
+  setSessionCookie(cookies, sessionCookie)
+}
+
+const getAccessToken = (req: IncomingMessage, res: OutgoingMessage) => {
+  const cookies = getCookiesInstance(req, res)
+  return cookies.get(cookieKeys.accessToken)
+}
+
+const getSessionToken = async (
+  req: IncomingMessage,
+  res: OutgoingMessage
+): Promise<string> => {
+  const cookies = getCookiesInstance(req, res)
+  return cookies.get(cookieKeys.sessionCookie)
+}
+
+const getCookiesInstance = (req: IncomingMessage, res: OutgoingMessage) => {
   if (process.server) {
-    return new Cookies(req.headers.cookie)
+    return createServerCookie(req.headers.cookie, res)
   } else {
     return new Cookies()
   }
+}
+
+const createServerCookie = (
+  cookie: string | undefined,
+  res: OutgoingMessage
+): Cookies => {
+  const universalCookie = new Cookies(cookie)
+  universalCookie.addChangeListener((change: CookieChangeOptions) => {
+    if (res.headersSent) {
+      return
+    }
+    let cookieHeader = res.getHeader('Set-Cookie')
+    if (typeof cookieHeader === 'string') {
+      cookieHeader = [cookieHeader]
+    } else if (typeof cookieHeader === 'number') {
+      cookieHeader = [cookieHeader.toString()]
+    }
+    cookieHeader = (cookieHeader as string[]) || []
+    if (change.value === undefined) {
+      cookieHeader.push(serialize(change.name, '', change.options))
+    } else {
+      cookieHeader.push(serialize(change.name, change.value, change.options))
+    }
+    res.setHeader('Set-Cookie', cookieHeader)
+  })
+  return universalCookie
 }
 
 const decodeAccessToken = async (
   token: string
 ): Promise<DecodedIdToken | null> => {
   try {
-    return await getAuth(useFirebaseAdmin()).verifyIdToken(token)
+    return await getAuth(useFirebaseAdmin()).verifyIdToken(token, true)
   } catch (e) {
     console.log(`failed to decode accessToken. ${e}`)
+    return null
+  }
+}
+
+const createSessionCookie = async (token: string): Promise<string> => {
+  return await getAuth(useFirebaseAdmin()).createSessionCookie(token, {
+    expiresIn: 1000 * 60 * 60 * 24 * 14
+  })
+}
+
+const decodeSessionToken = async (
+  token: string
+): Promise<DecodedIdToken | null> => {
+  try {
+    return await getAuth(useFirebaseAdmin()).verifySessionCookie(token, true)
+  } catch (e) {
+    console.log(`failed to decode sessionCookie. ${e}`)
     return null
   }
 }

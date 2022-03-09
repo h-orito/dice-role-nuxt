@@ -22,6 +22,7 @@
       <template #content>
         <Tag :value="gameTypeName" />
         <p class="text-xs" v-text="game.description"></p>
+        <p v-if="game.creator">GM: {{ game.creator.userName }}</p>
       </template>
     </Card>
   </NuxtLink>

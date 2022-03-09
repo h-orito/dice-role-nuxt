@@ -4,6 +4,7 @@
     header="ゲーム作成確認"
     class="text-sm"
     submit-button-name="作成する"
+    :submit-disabled="submitting"
     close-button-name="キャンセル"
     @submit="save"
     @close="closeModal"
@@ -101,7 +102,9 @@ const gameItems = computed(() => {
 
 const config = useRuntimeConfig()
 const closeModal = () => (isShow.value = false)
+const submitting = ref(false)
 const save = async () => {
+  submitting.value = true
   const {
     gameName,
     description,

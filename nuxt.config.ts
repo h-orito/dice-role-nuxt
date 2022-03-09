@@ -2,12 +2,8 @@ import { defineNuxtConfig } from 'nuxt3'
 
 // https://v3.nuxtjs.org/docs/directory-structure/nuxt.config
 export default defineNuxtConfig({
-  router: {
-    base: '/dice-role/'
-  },
   app: {
     baseURL: '/dice-role/'
-    // buildAssetsDir: '/dice-role/'
   },
   srcDir: 'src/',
   typescript: {

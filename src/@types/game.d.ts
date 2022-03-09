@@ -7,4 +7,5 @@ type Game = {
   startDatetime: Date
   themeImageUrl: string | null
   created: number
+  creator?: DiceRoleUser
 }

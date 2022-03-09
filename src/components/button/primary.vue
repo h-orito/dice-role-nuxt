@@ -3,23 +3,26 @@
     :label="label"
     class="p-button-sm p-button-outlined"
     :icon="iconClass"
+    :disabled="disabled"
     icon-pos="left"
   />
 </template>
 
 <script setup lang="ts">
 interface Props {
-  label: string;
-  icon?: string;
+  label: string
+  icon?: string
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
-  label: "",
+  label: '',
   icon: undefined,
-});
+  disabled: undefined
+})
 
 const iconClass = computed(() => {
-  if (!props.icon) return undefined;
-  return `pi pi-${props.icon}`;
-});
+  if (!props.icon) return undefined
+  return `pi pi-${props.icon}`
+})
 </script>
