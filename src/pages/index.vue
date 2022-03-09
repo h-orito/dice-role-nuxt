@@ -21,7 +21,7 @@
         <ButtonPrimary label="ログインする" @click="openSignInModal" />
         <SignInModal v-model:show="isShowSignInModal" />
       </div>
-      <h2>ゲーム一覧</h2>
+      <h2 class="mt-5">ゲーム一覧</h2>
       <div class="grid">
         <GameCard
           v-for="game in games"
@@ -46,8 +46,7 @@ import { useAuth } from '~/composables/useAuth'
 import GameCard from '~/components/pages/index/game-card.vue'
 import ModifyUserinfoModal from '../components/firebase/modify-userinfo-modal.vue'
 
-const config = useRuntimeConfig()
-const { data: games } = (await useFetch(`${config.apiRoot}api/games`, {
+const { data: games } = (await useFetch(`api/games`, {
   headers: useRequestHeaders(['cookie'])
 })) as { data: Ref<Game[]> }
 

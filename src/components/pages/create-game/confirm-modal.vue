@@ -120,8 +120,7 @@ const save = async () => {
     imageUrl = await upload(themeImage)
   }
 
-  const config = useRuntimeConfig()
-  const { data: game } = (await useFetch(`${config.apiRoot}api/create-game`, {
+  const { data: game } = (await useFetch(`api/create-game`, {
     headers: useRequestHeaders(['cookie']),
     method: 'POST',
     body: {

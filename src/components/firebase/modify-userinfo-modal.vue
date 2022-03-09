@@ -41,11 +41,10 @@ const isShow = computed({
   set: (value: boolean | undefined) => emit('update:show', value ?? false)
 })
 
-const config = useRuntimeConfig()
 const userName = ref('')
 
 onMounted(async () => {
-  const { data } = (await useFetch(`${config.apiRoot}api/user`, {
+  const { data } = (await useFetch(`api/user`, {
     headers: useRequestHeaders(['cookie'])
   })) as { data: Ref<DiceRoleUser> }
   userName.value = data.value.userName
@@ -70,7 +69,7 @@ const save = async () => {
   const userInfo: DiceRoleUser = {
     userName: userName.value
   }
-  await useFetch(`${config.apiRoot}api/modify-user`, {
+  await useFetch(`api/modify-user`, {
     headers: useRequestHeaders(['cookie']),
     method: 'POST',
     body: {
